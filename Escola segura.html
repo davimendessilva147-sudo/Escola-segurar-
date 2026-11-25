@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escola Segura</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+html,body{height:100%;width:100%;overflow:hidden}
+
+/* ANIMAÇÕES */
+@keyframes aparece{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes flutua{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+@keyframes brilha{0%{box-shadow:0 0 20px rgba(255,255,255,0.3)}100%{box-shadow:0 0 30px rgba(255,255,255,0.6)}}
+
+.app-container{width:100%;height:100vh;position:relative}
+.tela{display:none;width:100%;height:100vh;position:absolute;top:0;left:0;overflow-y:auto}
+.tela.ativa{display:block;animation:aparece 0.4s ease forwards}
+
+/* 🛡️ TELA DE CAPA */
+#tela-capa{background:linear-gradient(180deg,#4FC3F7 0%,#2196F3 35%,#1565C0 75%,#0D47A1 100%);height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:20px}
+.capa-icone{font-size:130px;animation:flutua 3s ease-in-out infinite;margin-bottom:10px}
+.capa-titulo{font-size:52px;font-weight:800;margin-bottom:10px;text-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.capa-subtitulo{font-size:20px;opacity:0.92;margin-bottom:70px;line-height:1.5;max-width:340px}
+.btn-capa{background:white;color:#0D47A1;font-size:22px;font-weight:bold;padding:18px 70px;border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,0.2);transition:all 0.3s ease;animation:brilha 2s ease-in-out infinite alternate}
+.btn-capa:active{transform:scale(0.97)}
+
+/* 🏫 FUNDO DEMAIS TELAS */
+.fundo-escola{background:linear-gradient(180deg,#F0F9FF 0%,#E0F2FE 50%,#BAE6FD 100%);min-height:100vh}
+
+/* CABEÇALHO */
+.cabecalho{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:linear-gradient(90deg,#0277BD,#0288D1);color:white;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.btn-voltar{background:none;border:none;color:white;font-size:24px;cursor:pointer;padding:5px}
+.cabecalho h2{font-size:20px;font-weight:600}
+
+/* CONTEÚDO */
+.conteudo{padding:25px}
+.saudacao{font-size:20px;color:#0C4A6E;margin-bottom:28px;text-align:center;font-weight:500}
+
+/* GRADE DE BOTÕES */
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.botao{border:none;border-radius:20px;padding:24px 12px;color:white;font-size:15px;font-weight:600;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.botao:active{transform:scale(0.96)}
+.botao span{font-size:34px;display:block;margin-bottom:8px}
+
+.botao-laranja{background:linear-gradient(135deg,#F59E0B,#D97706)}
+.botao-azul{background:linear-gradient(135deg,#14B8A6,#0D9488)}
+.botao-azul-escuro{background:linear-gradient(135deg,#3B82F6,#2563EB)}
+.botao-roxo{background:linear-gradient(135deg,#8B5CF6,#7C3AED)}
+.botao-verde{background:linear-gradient(135deg,#22C55E,#16A34A)}
+.botao-vermelho{background:linear-gradient(135deg,#EF4444,#DC2626)}
+.botao-rosa{background:linear-gradient(135deg,#EC4899,#DB2777)}
+.botao-cinza{background:linear-gradient(135deg,#6B7280,#4B5563)}
+
+/* CARDS */
+.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.card strong{display:block;color:#0C4A6E;font-size:16px;margin-bottom:6px}
+.card p{font-size:14px;color:#64748B;line-height:1.5}
+.card-contato{display:flex;align-items:center;gap:12px}
+.card-contato .icone{font-size:28px}
+.card-contato .info strong{margin-bottom:2px}
+
+/* FORMULÁRIO */
+label{display:block;margin-top:20px;margin-bottom:8px;font-size:15px;color:#334155;font-weight:500}
+input,textarea{width:100%;padding:14px;border:1px solid #CBD5E1;border-radius:12px;font-size:15px;background:#FAFEFF}
+textarea{min-height:110px;resize:none}
+.btn-enviar{width:100%;padding:15px;background:linear-gradient(90deg,#0288D1,#0369A1);color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;margin-top:24px;cursor:pointer;box-shadow:0 4px 12px rgba(2,136,209,0.3)}
+
+/* CENTRO */
+.centro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;text-align:center;padding:20px}
+h3{font-size:24px;color:#0C4A6E;margin-bottom:12px}
+p.texto{color:#64748B;margin-bottom:36px;line-height:1.6;max-width:320px}
+.icone-sucesso{font-size:90px;margin-bottom:20px}
+
+/* DICAS */
+.dica{background:white;border-radius:14px;padding:16px;margin-bottom:12px;border-left:4px solid #22C55E}
+.dica h4{color:#166534;font-size:16px;margin-bottom:6px}
+.dica p{color:#475569;font-size:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+<!-- 🛡️ TELA DE CAPA -->
+<div id="tela-capa" class="tela ativa">
+<div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center">
+<div class="capa-icone">🛡️</div>
+<h1 class="capa-titulo">Escola Segura</h1>
+<p class="capa-subtitulo">Mais segurança para você e para todos da nossa escola!</p>
+<button class="btn-capa" onclick="irPara('menu')">Entrar</button>
+</div>
+</div>
+
+<!-- 📱 MENU PRINCIPAL -->
+<div id="menu" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('tela-capa')">←</button>
+<h2>Menu Principal</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<p class="saudacao">👋 Olá! O que você precisa hoje?</p>
+<div class="grade">
+<button class="botao botao-laranja" onclick="irPara('aviso')"><span>⚠️</span>Avisar Problema</button>
+<button class="botao botao-azul" onclick="irPara('manutencao')"><span>🔧</span>Manutenção</button>
+<button class="botao botao-azul-escuro" onclick="irPara('protecao')"><span>🛡️</span>Proteção</button>
+<button class="botao botao-roxo" onclick="irPara('avisos')"><span>🔔</span>Avisos</button>
+<button class="botao botao-verde" onclick="irPara('contatos')"><span>📞</span>Contatos</button>
+<button class="botao botao-rosa" onclick="irPara('dicas')"><span>💡</span>Dicas</button>
+</div>
+<button class="botao botao-cinza" style="width:100%" onclick="irPara('acompanhar')"><span>✅</span>Acompanhar Solicitações</button>
+</div>
+</div>
+
+<!-- ⚠️ AVISAR PROBLEMA -->
+<div id="aviso" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Avisar Problema</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<label>O que está acontecendo?</label>
+<textarea placeholder="Descreva com detalhes o que você observou..."></textarea>
+<label>Local</label>
+<input type="text" placeholder="Ex: Sala 3, Banheiro masculino, Pátio, Quadra...">
+<label>Data e Hora</label>
+<input type="text" placeholder="Hoje às 14h30">
+<label>Foto (opcional)</label>
+<input type="file" accept="image/*">
+<button class="btn-enviar" onclick="irPara('sucesso')">📤 Enviar Solicitação</button>
+</div>
+</div>
+
+<!-- 🔧 MANUTENÇÃO -->
+<div id="manutencao" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Manutenção</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<p class="saudacao">🔧 Solicitações de reparo</p>
+<div class="card">
+<strong>💡 Lâmpada queimada — Sala 2</strong>
+<p>📅 Enviado: hoje às 08h40<br>📊 Status: Em andamento</p>
+</div>
+<div class="card">
+<strong>🚪 Porta com defeito — Banheiro</strong>
+<p>📅 Enviado: ontem às 15h15<br>📊 Status: Resolvido ✅</p>
+</div>
+<div class="card">
+<strong>🪑 Carteira quebrada — Sala 5</strong>
+<p>📅 Enviado: 25/11 às 09h00<br>📊 Status: Pendente ⏳</p>
+</div>
+</div>
+</div>
+
+<!-- 🛡️ PROTEÇÃO -->
+<div id="protecao" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Proteção e Apoio</h2>
+<div></div>
+</header>
+<div class="conteudo centro">
+<div style="font-size:70px;margin-bottom:15px;">🤝</div>
+<h3>Você não está sozinho!</h3>
+<p class="texto">Se você está passando por uma situação difícil, pode denunciar de forma totalmente anônima. Ninguém vai saber que foi você. Estamos aqui para te proteger.</p>
+<button class="botao botao-vermelho" style="width:80%" onclick="irPara('denuncia')">📝 Fazer Denúncia Anônima</button>
+<br><br>
+<p style="font-size:14px;color:#94A3B8">Sua identidade será mantida em sigilo total.</p>
+</div>
+</div>
+
+<!-- 📝 DENÚNCIA -->
+<div id="denuncia" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('protecao')">←</button>
+<h2>Denúncia Anônima</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<label>O que está acontecendo?</label>
+<textarea placeholder="Descreva o que aconteceu. Quanto mais detalhes, melhor..."></textarea>
+<label>Onde aconteceu?</label>
+<input type="text" placeholder="Ex: Pátio, Sala, Rua próxima à escola...">
+<label>Quando aconteceu?</label>
+<input type="text" placeholder="Ex: Semana passada, hoje à tarde...">
+<button class="btn-enviar" onclick="irPara('sucesso')">🔒 Enviar de Forma Anônima</button>
+</div>
+</div>
+
+<!-- 🔔 AVISOS DA ESCOLA -->
+<div id="avisos" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Avisos da Escola</h2>
+</header>
+<div class="conteudo">
+<p class="saudacao">📢 Fique por dentro!</p>
+<div class="card">
+<strong>📌 Reunião de Pais e Mães</strong>
+<p>Hoje, às 19h, no auditório. Contamos com sua presença!</p>
+</div>
+<div class="card">
+<strong>📌 Prova de Matemática — 8º Ano</strong>
+<p>Quinta-feira, dia 26/11. Estudem bem! 📚</p>
+</div>
+<div class="card">
+<strong>📌 Semana do Meio Ambiente 🌱</strong>
+<p>De 27/11 a 01/12. Traga materiais recicláveis!</p>
+</div>
+<div class="card">
+<strong>📌 Recesso Escolar</strong>
+<p>De 23/12 a 05/01. Boas festas! 🎄</p>
+</div>
+</div>
+</div>
+
+<!-- 📞 CONTATOS IMPORTANTES -->
+<div id="contatos" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Contatos Importantes</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<p class="saudacao">📞 Números para quando precisar</p>
+<div class="card card-contato">
+<span class="icone">🏫</span>
+<div class="info"><strong>Secretaria da Escola</strong><p>(99) 99999-9999</p></div>
+</div>
+<div class="card card-contato">
+<span class="icone">👮</span>
+<div class="info"><strong>Polícia Militar</strong><p>190 — Ligue a qualquer hora</p></div>
+</div>
+<div class="card card-contato">
+<span class="icone">🚒</span>
+<div class="info"><strong>Bombeiros</strong><p>193 — Emergências</p></div>
+</div>
+<div class="card card-contato">
+<span class="icone">🚑</span>
+<div class="info"><strong>SAMU — Saúde</strong><p>192 — Emergência médica</p></div>
+</div>
+<div class="card card-contato">
+<span class="icone">❤️</span>
+<div class="info"><strong>Centro de Valorização da Vida</strong><p>188 — Precisa conversar?</p></div>
+</div>
+<div class="card card-contato">
+<span class="icone">🛡️</span>
+<div class="info"><strong>Disque Denúncia</strong><p>181 — Anônimo e gratuito</p></div>
+</div>
+</div>
+</div>
+
+<!-- 💡 DICAS DE SEGURANÇA -->
+<div id="dicas" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Dicas de Segurança</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<p class="saudacao">💡 Aprenda e compartilhe!</p>
+<div class="dica">
+<h4>🏫 No caminho da escola</h4>
+<p>Ande sempre com amigos. Evite atalhos e ruas desertas. Mantenha os pais informados sobre seu trajeto.</p>
+</div>
+<div class="dica">
+<h4>🌐 Na internet</h4>
+<p>Nunca compartilhe senhas, endereço ou nome da escola com desconhecidos. Pense bem antes de postar algo.</p>
+</div>
+<div class="dica">
+<h4>🤝 Com os colegas</h4>
+<p>Respeite as diferenças. Se alguém estiver sendo tratado mal, não ria — procure um adulto de confiança para ajudar.</p>
+</div>
+<div class="dica">
+<h4>⚠️ Em situações difíceis</h4>
+<p>Se algo te incomoda, não guarde só para você. Converse com um professor, coordenador ou alguém de confiança.</p>
+</div>
+<div class="dica">
+<h4>🏠 Em casa</h4>
+<p>Tenha sempre os números de emergência salvos no celular e em local visível em casa.</p>
+</div>
+</div>
+</div>
+
+<!-- ✅ ACOMPANHAR SOLICITAÇÕES -->
+<div id="acompanhar" class="tela fundo-escola">
+<header class="cabecalho">
+<button class="btn-voltar" onclick="irPara('menu')">←</button>
+<h2>Minhas Solicitações</h2>
+<div></div>
+</header>
+<div class="conteudo">
+<p class="saudacao">📋 Acompanhe tudo que você enviou</p>
+<div class="card">
+<strong>💡 Lâmpada queimada — Sala 2</strong>
+<p>Enviado hoje às 08h40<br>📊 <strong style="color:#F59E0B">Em andamento</strong></p>
+</div>
+<div class="card">
+<strong>🚪 Porta com defeito — Banheiro</strong>
+<p>Enviado ontem às 15h15<br>📊 <strong style="color:#22C55E">Resolvido ✅</strong></p>
+</div>
+<div class="card">
+<strong>🪑 Carteira quebrada — Sala 5</strong>
+<p>Enviado dia 25/11 às 09h00<br>📊 <strong style="color:#EF4444">Pendente ⏳</strong></p>
+</div>
+</div>
+</div>
+
+<!-- ✅ SUCESSO -->
+<div id="sucesso" class="tela fundo-escola">
+<div class="conteudo centro">
+<div class="icone-sucesso">✅</div>
+<h3>Enviado com Sucesso!</h3>
+<p class="texto">Obrigado por cuidar da nossa escola! Sua solicitação será analisada em breve.</p>
+<button class="botao botao-azul-escuro" style="width:75%" onclick="irPara('menu')">🏠 Voltar ao Menu</button>
+</div>
+</div>
+
+</div>
+
+<script>
+function irPara(nomeTela){
+document.querySelectorAll('.tela').forEach(tela=>tela.classList.remove('ativa'));
+document.getElementById(nomeTela).classList.add('ativa');
+window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
